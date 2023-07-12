@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -shared -Wl,-soname,libjson_operate.so -o libjson_operate.so CMakeFiles/json_operate.dir/json_operate_autogen/mocs_compilation.cpp.o CMakeFiles/json_operate.dir/home/klug/klug/vortex/json_operate/json_operate.cpp.o  /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.15.3 

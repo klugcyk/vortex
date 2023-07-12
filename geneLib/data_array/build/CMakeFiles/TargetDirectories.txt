@@ -1,0 +1,4 @@
+/home/klug/klug/vortex/geneLib/data_array/build/CMakeFiles/dataArray.dir
+/home/klug/klug/vortex/geneLib/data_array/build/CMakeFiles/edit_cache.dir
+/home/klug/klug/vortex/geneLib/data_array/build/CMakeFiles/rebuild_cache.dir
+/home/klug/klug/vortex/geneLib/data_array/build/CMakeFiles/dataArray_autogen.dir

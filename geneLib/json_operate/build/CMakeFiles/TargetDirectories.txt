@@ -1,0 +1,4 @@
+/home/klug/klug/vortex/geneLib/json_operate/build/CMakeFiles/json_operate.dir
+/home/klug/klug/vortex/geneLib/json_operate/build/CMakeFiles/edit_cache.dir
+/home/klug/klug/vortex/geneLib/json_operate/build/CMakeFiles/rebuild_cache.dir
+/home/klug/klug/vortex/geneLib/json_operate/build/CMakeFiles/json_operate_autogen.dir

@@ -2,7 +2,7 @@
     author:klug
     献给我的心上人等待天使的妹妹
     start:221129
-    last:230704
+    last:230711
 */
 
 #ifndef CAMERAGENE_HPP
@@ -14,7 +14,7 @@
 #include <chrono>
 #include <stdio.h>
 #include <unistd.h>
-#include "camera/camera.hpp"
+//#include "camera/camera.hpp"
 
 using namespace cv;
 using namespace std;

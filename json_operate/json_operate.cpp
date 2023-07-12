@@ -3,10 +3,10 @@
     author:klug
     献给美人儿蕾梅黛丝
     start:230524
-    last:230529
+    last:230711
 */
 
-#include "gene_operate/json_operate.hpp"
+#include "json_operate/json_operate.hpp"
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QFile>
@@ -266,7 +266,6 @@ void json_write(std::string filename,std::string *json_name,double *json_value,i
 
         QByteArray byte_array=document.toJson(QJsonDocument::Compact);
         QString json_str(byte_array);
-        //根据实际填写路径
         QString name=QString::fromStdString(filename);
         QFile file(name);
 
