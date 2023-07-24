@@ -2,10 +2,10 @@
     author:klug
     献给我的心上人等待天使的妹妹
     start:221129
-    last:230628
+    last:230724
 */
 
-#include "camera/cameraGene.hpp"
+#include "cameraGene/cameraGene.hpp"
 
 /*
     初始化标定参数

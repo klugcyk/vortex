@@ -22,15 +22,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(OpenCV REQUIRED)
 
 # selbst
-include_directories(~/buendia)
+include_directories(~/klug/vortex)
 
 # opencv
 include_directories(/usr/local/include/opencv4)
 
 add_library(cameraGene SHARED
   cameraGene_global.h
-  ~/buendia/camera/cameraGene1.cpp
-  #~/buendia/camera/cameraGene.hpp
+  ~/klug/vortex/cameraGene/cameraGene.cpp
+  ~/klug/vortex/cameraGene/cameraGene.hpp
 )
 
 target_link_libraries(cameraGene #PRIVATE Qt${QT_VERSION_MAJOR}::Core 

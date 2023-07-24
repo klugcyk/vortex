@@ -18,13 +18,70 @@ namespace math_leastsqaure
     @points:点的集合
     @res_line:返回值，拟合结果直线
 */
-math_geometry::geo_line_param line_calculate_3d(std::vector<Eigen::Vector2d> points)
+math_geometry::geo_line_param line_calculate_3d(std::vector<Eigen::Vector3d> points)
 {
     math_geometry::geo_line_param res_line;
 
-    // 构造最小二乘方程
+    // 构造最小二乘方程，计算x的参数
+    double a11=0;
+    double a12=0;
+    double a21=0;
+    double a22=0;
+    double b1=0;
+    double b2=0;
+
+    for(size_t point_cnt=0;point_cnt<points.size();point_cnt++)
+    {
+        a11+=points[point_cnt](0)*points[point_cnt](0);
+        a12+=points[point_cnt](0);
+        b1+=points[point_cnt](0)*points[point_cnt](2);
+        b2+=points[point_cnt](2);
+    }
+
+    // 求解最小二乘方程，计算x的参数
+    a21=a12;
+    a22=points.size()+1;
 
     // 求解最小二乘方程
+    Eigen::Matrix2d equation_link(2,2);
+    equation_link<<a11,a12,a21,a22;
+    Eigen::Vector2d equation_recht(2,1);
+    equation_recht<<b1,b2;
+
+    Eigen::Vector2d res=equation_link.llt().solve(equation_recht);
+
+    res_line.a=res(0);
+    res_line.x0=res(1);
+
+    // 构造最小二乘方程，计算y的参数
+    a11=0;
+    a12=0;
+    b1=0;
+    b2=0;
+
+    for(size_t point_cnt=0;point_cnt<points.size();point_cnt++)
+    {
+        a11+=points[point_cnt](1)*points[point_cnt](1);
+        a12+=points[point_cnt](1);
+        b1+=points[point_cnt](1)*points[point_cnt](2);
+        b2+=points[point_cnt](2);
+    }
+
+    // 求解最小二乘方程，计算y的参数
+    a21=a12;
+    a22=points.size()+1;
+
+    // 求解最小二乘方程
+    equation_link<<a11,a12,a21,a22;
+    equation_recht<<b1,b2;
+
+    res=equation_link.llt().solve(equation_recht);
+
+    res_line.b=res(0);
+    res_line.y0=res(1);
+
+    res_line.c=1;
+    res_line.z0=0;
 
     return res_line;
 }
