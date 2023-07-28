@@ -1,0 +1,3 @@
+/home/klug/vortex/geneLib/cameraGene/build/CMakeFiles/cameraGene.dir
+/home/klug/vortex/geneLib/cameraGene/build/CMakeFiles/edit_cache.dir
+/home/klug/vortex/geneLib/cameraGene/build/CMakeFiles/rebuild_cache.dir

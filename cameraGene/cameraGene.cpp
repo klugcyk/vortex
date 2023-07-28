@@ -2,7 +2,7 @@
     author:klug
     献给我的心上人等待天使的妹妹
     start:221129
-    last:230724
+    last:230728
 */
 
 #include "cameraGene/cameraGene.hpp"
@@ -20,7 +20,7 @@ cameraGene::cameraGene(int xSize,int ySize,float xLength,float yLength)
     board_size.width=ySize;
     square_size.height=xLength;
     square_size.width=yLength;
-#ifdef camera_print_msg_info
+#ifdef cameraGenePrintMsgInfo
     printf("initial camera gene operate...\n");
 #endif
 
@@ -28,7 +28,7 @@ cameraGene::cameraGene(int xSize,int ySize,float xLength,float yLength)
 
 cameraGene::cameraGene()
 {
-#ifdef camera_print_msg_info
+#ifdef cameraGenePrintMsgInfo
     printf("open camera gene operate...\n");
 #endif
 
@@ -36,12 +36,16 @@ cameraGene::cameraGene()
 
 cameraGene::~cameraGene()
 {
-#ifdef camera_print_msg_info
+#ifdef cameraGenePrintMsgInfo
     printf("end camera gene operate...\n");
 #endif
 
 }
 
+/*
+    相机标定
+    @img_vector:图像集合
+*/
 void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector)
 {
     int image_count=0;
@@ -53,7 +57,7 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector)
     for(size_t i=0;i<img_vector.size();i++)
     {
         image_count++;
-#ifdef construct_cal_print_msg_info
+#ifdef cameraGenePrintMsgInfo
         std::cout << "image_count=" << image_count << std::endl;
 #endif
         cv::Mat imageInput = img_vector[i];
@@ -72,17 +76,10 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector)
             cv::cornerSubPix(view_gray,image_points,cv::Size(11,11),cv::Size(-1, -1),cv::TermCriteria(cv::TermCriteria::EPS+cv::TermCriteria::COUNT,30,0.01));
             image_points_seq.push_back(image_points);
             drawChessboardCorners(view_gray,board_size,image_points,true);
-#ifdef construct_cal_save_process
-            write_path=write_img_path;
-            write_path+="view_gray_";
-            write_path+=std::to_string(i+1);
-            write_path+=".png";
-            cv::imwrite(write_path,view_gray);
-#endif
         }
         else
         {
-#ifdef construct_cal_print_error_info
+#ifdef cameraGenePrintErrorInfo
             printf("img fail...\n");
 #endif
         }
@@ -113,7 +110,7 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector)
         rms=calibrateCamera(object_points_seq,image_points_seq,image_size,cameraMatrix,distCoeffs,rvecsMat,tvecsMat, cv::CALIB_FIX_K3+cv::CALIB_ZERO_TANGENT_DIST);
     }
 
-#ifdef camera_print_data_info
+#ifdef cameraGenePrintDataInfo
     printf("rms:=%f\n",rms);
 #endif
 
@@ -142,9 +139,15 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector)
         tm.at<double>(3,3)=1;
         extrinsic.push_back(tm);
     }
-
+    calDone=1;
 }
 
+/*
+    相机标定
+    @img_vector:图像集合
+    @camera_matrix:相机内参矩阵
+    @dis:畸变系数
+*/
 void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector,cv::Mat &camera_matrix,cv::Mat &dis)
 {
     int image_count=0;
@@ -156,7 +159,7 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector,cv::Mat &camera
     for(size_t i=0;i<img_vector.size();i++)
     {
         image_count++;
-#ifdef construct_cal_print_msg_info
+#ifdef cameraGenePrintMsgInfo
         std::cout << "image_count=" << image_count << std::endl;
 #endif
         cv::Mat imageInput = img_vector[i];
@@ -175,17 +178,10 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector,cv::Mat &camera
             cv::cornerSubPix(view_gray,image_points,cv::Size(11,11),cv::Size(-1, -1),cv::TermCriteria(cv::TermCriteria::EPS+cv::TermCriteria::COUNT,30,0.01));
             image_points_seq.push_back(image_points);
             drawChessboardCorners(view_gray,board_size,image_points,true);
-#ifdef construct_cal_save_process
-            write_path=write_img_path;
-            write_path+="view_gray_";
-            write_path+=std::to_string(i+1);
-            write_path+=".png";
-            cv::imwrite(write_path,view_gray);
-#endif
         }
         else
         {
-#ifdef construct_cal_print_error_info
+#ifdef cameraGenePrintErrorInfo
             printf("img fail...\n");
 #endif
         }
@@ -216,7 +212,7 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector,cv::Mat &camera
         rms=calibrateCamera(object_points_seq,image_points_seq,image_size,camera_matrix,dis,rvecsMat,tvecsMat,cv::CALIB_FIX_K3+cv::CALIB_ZERO_TANGENT_DIST);
     }
 
-#ifdef camera_print_data_info
+#ifdef cameraGenePrintDataInfo
     printf("rms:=%f\n",rms);
 #endif
 
@@ -245,6 +241,19 @@ void cameraGene::cameraCalibrate(std::vector<cv::Mat> img_vector,cv::Mat &camera
         tm.at<double>(3,3)=1;
         extrinsic.push_back(tm);
     }
-
+    calDone=1;
 }
 
+/*
+    基于标记点的相机姿态估计算法
+    @img_vector:图像集合,30张图片，前25张用于标定
+*/
+void cameraGene::camPose(std::vector<cv::Mat> img_vector)
+{
+    //先对相机内参标定
+    if(calDone!=1)
+    {
+        cameraCalibrate(img_vector);
+        calDone=1;
+    }
+}
